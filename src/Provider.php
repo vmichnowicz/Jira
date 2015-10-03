@@ -16,7 +16,8 @@ class Provider extends AbstractProvider
             throw new \InvalidArgumentException('Invalid request. Missing OAuth verifier.');
         }
 
-        $user = $this->server->getUserDetails($token = $this->getToken());
+        $token = $this->getToken();
+        $user = $this->server->getUserDetails($token);
 
         return (new User())->setRaw($user->extra)->map([
             'id' => $user['key'], 'nickname' => $user['name'],

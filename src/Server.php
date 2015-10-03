@@ -6,6 +6,7 @@ use League\OAuth1\Client\Credentials\TokenCredentials;
 use League\OAuth1\Client\Server\Server as BaseServer;
 use League\OAuth1\Client\Signature\SignatureInterface;
 use League\OAuth1\Client\Credentials\ClientCredentialsInterface;
+use League\OAuth1\Client\Server\User;
 
 class Server extends BaseServer
 {
@@ -62,7 +63,7 @@ class Server extends BaseServer
         $parameters = $this->baseProtocolParameters();
 
         // without 'oauth_callback'
-        $parameters['oauth_signature'] = $this->signature->sign($uri, $parameters, 'POST', $this->$jiraCertPath);
+        $parameters['oauth_signature'] = $this->signature->sign($uri, $parameters, 'POST', $this->jiraCertPath);
 
         return $this->normalizeProtocolParameters($parameters);
     }
@@ -72,7 +73,7 @@ class Server extends BaseServer
      */
     public function urlTemporaryCredentials()
     {
-        return self::JIRA_BASE_URL.'/plugins/servlet/oauth/request-token?oauth_callback='.
+        return $this->getJiraBaseUrl().'/plugins/servlet/oauth/request-token?oauth_callback='.
             rawurlencode($this->clientCredentials->getCallbackUri());
     }
 
@@ -81,7 +82,7 @@ class Server extends BaseServer
      */
     public function urlAuthorization()
     {
-        return self::JIRA_BASE_URL.'/plugins/servlet/oauth/authorize';
+        return $this->getJiraBaseUrl().'/plugins/servlet/oauth/authorize';
     }
 
     /**
@@ -89,7 +90,7 @@ class Server extends BaseServer
      */
     public function urlTokenCredentials()
     {
-        return self::JIRA_BASE_URL.'/plugins/servlet/oauth/access-token';
+        return $this->getJiraBaseUrl().'/plugins/servlet/oauth/access-token';
     }
 
     /**
@@ -97,7 +98,7 @@ class Server extends BaseServer
      */
     public function urlUserDetails()
     {
-        return self::JIRA_BASE_URL.'/rest/api/2/myself';
+        return $this->getJiraBaseUrl().'/rest/api/2/myself';
     }
 
     /**
@@ -105,7 +106,12 @@ class Server extends BaseServer
      */
     public function userDetails($data, TokenCredentials $tokenCredentials)
     {
-        return $data;
+        $user = new User();
+
+        $user->email = isset($data['email']) ? $data['email'] : null;
+        $user->name = isset($data['name']) ? $data['name'] : null;
+
+        return $user;
     }
 
     /**
