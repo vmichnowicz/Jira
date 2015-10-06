@@ -24,7 +24,8 @@ class RsaSha1SignatureTest extends Base
         $path = tempnam(sys_get_temp_dir(), 'pem');
 
         $signature = new \SocialiteProviders\Jira\RsaSha1Signature($credentials);
-        $signature->sign('http://example.com', [], 'POST', $path);
+        $signature->setCertPath($path);
+        $signature->sign('http://example.com', [], 'POST');
     }
 
     /**
@@ -41,8 +42,9 @@ class RsaSha1SignatureTest extends Base
         file_put_contents($path, self::PRIVATE_KEY);
 
         $signature = new \SocialiteProviders\Jira\RsaSha1Signature($credentials);
+        $signature->setCertPath($path);
 
-        $this->assertEquals(self::SIGNATURE, $signature->sign('http://example.com', [], 'POST', $path));
+        $this->assertEquals(self::SIGNATURE, $signature->sign('http://example.com', [], 'POST'));
     }
 
 }

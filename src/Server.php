@@ -38,6 +38,7 @@ class Server extends BaseServer
 
         // !! RsaSha1Signature for Jira
         $this->signature = $signature ?: new RsaSha1Signature($clientCredentials);
+        $this->signature->setCertPath($this->jiraCertPath);
     }
 
     /**
@@ -63,7 +64,7 @@ class Server extends BaseServer
         $parameters = $this->baseProtocolParameters();
 
         // without 'oauth_callback'
-        $parameters['oauth_signature'] = $this->signature->sign($uri, $parameters, 'POST', $this->jiraCertPath);
+        $parameters['oauth_signature'] = $this->signature->sign($uri, $parameters, 'POST');
 
         return $this->normalizeProtocolParameters($parameters);
     }
