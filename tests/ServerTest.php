@@ -11,6 +11,8 @@ class ServerTest extends Base
 
     /**
      * Make sure user details is an object
+     *
+     * @TODO fix exception
      */
     public function testUserDetailsType()
     {
@@ -27,9 +29,10 @@ class ServerTest extends Base
 
         $server = new \SocialiteProviders\Jira\Server($array);
 
-        $temp = new TemporaryCredentials();
+        $temp = new \League\OAuth1\Client\Credentials\TemporaryCredentials();
+        $temp->setIdentifier(self::IDENTIFIER);
 
-        $token = $server->getTokenCredentials($temp, 'temporary-identifier', 'verifier');
+        $token = $server->getTokenCredentials($temp, self::IDENTIFIER, '');
 
         $data = [
             'name' => 'john doe',

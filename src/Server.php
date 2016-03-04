@@ -14,6 +14,7 @@ class Server extends BaseServer
 
     private $jiraBaseUrl;
     private $jiraCertPath;
+    private $jiraUserDetailsUrl;
 
     /**
      * Create a new server instance.
@@ -28,6 +29,7 @@ class Server extends BaseServer
         // Pass through an array or client credentials, we don't care
         if (is_array($clientCredentials)) {
             $this->jiraBaseUrl = isset($clientCredentials['base_url']) ? $clientCredentials['base_url'] : null;
+            $this->jiraUserDetailsUrl = isset($clientCredentials['user_details_url']) ? $clientCredentials['user_details_url'] : null;
             $this->jiraCertPath = isset($clientCredentials['cert']) ? $clientCredentials['cert'] : storage_path().'/app/keys/jira.pem';
             $clientCredentials = $this->createClientCredentials($clientCredentials);
         } elseif (!$clientCredentials instanceof ClientCredentialsInterface) {
@@ -99,7 +101,7 @@ class Server extends BaseServer
      */
     public function urlUserDetails()
     {
-        return $this->getJiraBaseUrl().'/rest/api/2/myself';
+        return empty($this->jiraUserDetailsUrl) ? $this->getJiraBaseUrl().'/rest/api/2/myself' : $this->jiraUserDetailsUrl;
     }
 
     /**

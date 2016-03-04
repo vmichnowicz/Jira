@@ -8,8 +8,6 @@
  */
 class RsaSha1SignatureTest extends Base
 {
-    const SIGNATURE = 'Vr9+xQiv9M77aQmgZdPnMtEKKZF7/KWBc4+njMdU+Of0baz5XuNCScJhDq6kvEiqCJBItgr1uD1EpN1FSIaNLQZwYEqXLShGLzuucwGF4TckDPOzxsP46ybOusjevgNqFtSkblVH2Kk0P/33kPtSkPAh3xN8i19LEKQWNXpIMFU=';
-
     /**
      * Test invalid cert
      *
@@ -34,8 +32,8 @@ class RsaSha1SignatureTest extends Base
     public function testValidCert()
     {
         $credentials = new \League\OAuth1\Client\Credentials\ClientCredentials();
-        $credentials->setIdentifier('');
-        $credentials->setSecret('');
+        $credentials->setIdentifier(self::IDENTIFIER);
+        $credentials->setSecret(self::SECRET);
 
         $path = tempnam(sys_get_temp_dir(), 'pem');
 
